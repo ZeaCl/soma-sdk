@@ -65,12 +65,7 @@ describe('SomaCopilot', () => {
 
 describe('SomaPanel', () => {
   it('renders panel with tabs', () => {
-    const { container } = render(
-      <SomaPanel
-        token="test-token"
-        baseUrl="http://test.local"
-      />
-    )
+    const { container } = render(<SomaPanel />)
     expect(container).toBeDefined()
   })
 })
