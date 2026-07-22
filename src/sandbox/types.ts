@@ -2,7 +2,7 @@
  * SandboxProvider — abstraction for agent file storage.
  *
  * Implement this interface to plug any storage backend (S3, GCS, local FS, memory)
- * into GliaFileBrowser without depending on Soma's REST API.
+ * into SomaFileBrowser without depending on Soma's REST API.
  */
 
 export interface SandboxFile {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-interface GliaConversationListProps {
+interface SomaConversationListProps {
   conversations: Array<{ id: string; title: string; lastMessageAt: string; messageCount: number }>
   activeId?: string
   onSelect?: (id: string) => void
@@ -10,7 +10,7 @@ interface GliaConversationListProps {
   agents?: Array<{ id: string; name: string }>
 }
 
-export function GliaConversationList({ conversations, activeId, onSelect, agents = [] }: GliaConversationListProps) {
+export function SomaConversationList({ conversations, activeId, onSelect, agents = [] }: SomaConversationListProps) {
   return (
     <div className="flex flex-col gap-1 p-2">
       {agents.map(agent => (

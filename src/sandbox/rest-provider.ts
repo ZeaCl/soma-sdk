@@ -1,7 +1,7 @@
 /**
  * RestSandboxProvider — connects to Soma's /api/v1/files REST API.
  *
- * This is the default provider when no custom sandbox is passed to GliaFileBrowser.
+ * This is the default provider when no custom sandbox is passed to SomaFileBrowser.
  */
 
 import type { SandboxProvider, SandboxFile } from './types'

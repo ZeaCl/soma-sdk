@@ -1,4 +1,4 @@
-export interface GliaMessage {
+export interface SomaMessage {
   id: string
   role: 'user' | 'assistant' | 'system'
   content: string
@@ -7,21 +7,21 @@ export interface GliaMessage {
   timestamp: Date
 }
 
-export interface GliaConversation {
+export interface SomaConversation {
   id: string
   title: string
   lastMessageAt: string
   messageCount: number
 }
 
-export interface GliaFile {
+export interface SomaFile {
   name: string
   type: 'file' | 'dir'
   size: number
   ext?: string
 }
 
-export interface GliaSkill {
+export interface SomaSkill {
   name: string
   description: string
   builtin: boolean
@@ -29,7 +29,7 @@ export interface GliaSkill {
   agents?: string[]
 }
 
-export interface GliaAgent {
+export interface SomaAgent {
   id: string
   email: string
   is_agent: boolean
@@ -41,7 +41,7 @@ export interface GliaAgent {
   }
 }
 
-export type GliaStreamEvent =
+export type SomaStreamEvent =
   | { type: 'thinking_start' }
   | { type: 'thinking'; text: string }
   | { type: 'thinking_end' }
@@ -53,7 +53,7 @@ export type GliaStreamEvent =
   | { type: 'error'; message: string }
   | { type: 'ready' }
 
-export interface UseGliaOptions {
+export interface UseSomaOptions {
   agentId: string
   conversationId?: string
   apiKey?: string
@@ -81,12 +81,12 @@ export interface UseGliaOptions {
   onError?: (message: string) => void
 }
 
-export interface UseGliaReturn {
+export interface UseSomaReturn {
   send: (text: string) => void
   cancel: () => void
   isConnected: boolean
   isStreaming: boolean
-  messages: GliaMessage[]
+  messages: SomaMessage[]
   streamContent: string
   reconnect: () => void
 }

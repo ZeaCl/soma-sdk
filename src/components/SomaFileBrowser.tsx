@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import type { GliaFile } from '../types'
+import type { SomaFile } from '../types'
 
-export interface GliaFileBrowserProps {
-  files: GliaFile[]
+export interface SomaFileBrowserProps {
+  files: SomaFile[]
   loading?: boolean
-  onSelect?: (file: GliaFile) => void
+  onSelect?: (file: SomaFile) => void
   onUpload?: (name: string, data: string, path?: string) => Promise<boolean>
   onMkdir?: (path: string) => Promise<void>
   onDelete?: (path: string) => Promise<void>
@@ -26,7 +26,7 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-function fileIcon(f: GliaFile): string {
+function fileIcon(f: SomaFile): string {
   if (f.type === 'dir') return '📁'
   const ext = f.ext?.toLowerCase() || ''
   if (['.md', '.markdown'].includes(ext)) return '📝'
@@ -38,11 +38,11 @@ function fileIcon(f: GliaFile): string {
   return '📄'
 }
 
-export function GliaFileBrowser({ files, loading, onSelect, readFile }: GliaFileBrowserProps) {
+export function SomaFileBrowser({ files, loading, onSelect, readFile }: SomaFileBrowserProps) {
   const [viewingFile, setViewingFile] = useState<{ name: string; content: string | null; loading: boolean } | null>(null)
   const [currentPath, setCurrentPath] = useState('')
 
-  const handleFileClick = async (f: GliaFile) => {
+  const handleFileClick = async (f: SomaFile) => {
     if (f.type === 'dir') {
       setCurrentPath(f.name)
       onSelect?.(f)

@@ -1,15 +1,15 @@
 // Hooks
-export { useGlia } from './hooks/useGlia'
-export { useGliaConversations, useGliaFiles, useGliaFileContent, useGliaSkills, useGliaAgents } from './hooks/api'
+export { useSoma } from './hooks/useSoma'
+export { useSomaConversations, useSomaFiles, useSomaFileContent, useSomaSkills, useSomaAgents } from './hooks/api'
 
 // Components
-export { GliaChat } from './components/GliaChat'
-export type { GliaChatProps, GliaChatColors, GliaChatMessage } from './components/GliaChat'
-export { GliaCopilot } from './components/GliaCopilot'
-export { GliaConversationList } from './components/GliaConversationList'
-export { GliaFileBrowser } from './components/GliaFileBrowser'
-export { GliaFileViewer } from './components/GliaFileViewer'
-export { GliaSkillEditor } from './components/GliaSkillEditor'
+export { SomaChat } from './components/SomaChat'
+export type { SomaChatProps, SomaChatColors, SomaChatMessage } from './components/SomaChat'
+export { SomaCopilot } from './components/SomaCopilot'
+export { SomaConversationList } from './components/SomaConversationList'
+export { SomaFileBrowser } from './components/SomaFileBrowser'
+export { SomaFileViewer } from './components/SomaFileViewer'
+export { SomaSkillEditor } from './components/SomaSkillEditor'
 export { AgentSkillPanel } from './components/AgentSkillPanel'
 export { SomaPanel } from './components/SomaPanel'
 export { SkillManager } from './components/SkillManager'
@@ -26,12 +26,12 @@ export type { SandboxProvider, SandboxFile } from './sandbox/types'
 
 // Types
 export type {
-  GliaMessage,
-  GliaConversation,
-  GliaFile,
-  GliaSkill,
-  GliaAgent,
-  GliaStreamEvent,
-  UseGliaOptions,
-  UseGliaReturn,
+  SomaMessage,
+  SomaConversation,
+  SomaFile,
+  SomaSkill,
+  SomaAgent,
+  SomaStreamEvent,
+  UseSomaOptions,
+  UseSomaReturn,
 } from './types'

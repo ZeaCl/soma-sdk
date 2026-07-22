@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import type { GliaConversation, GliaFile, GliaSkill, GliaAgent } from '../types'
+import type { SomaConversation, SomaFile, SomaSkill, SomaAgent } from '../types'
 
 const apiFetch = (url: string, token: string, options: RequestInit = {}) =>
   fetch(url, {
@@ -15,8 +15,8 @@ const apiFetch = (url: string, token: string, options: RequestInit = {}) =>
 
 // ── Conversations ──────────────────────────────
 
-export function useGliaConversations(token: string, baseUrl = '') {
-  const [conversations, setConversations] = useState<GliaConversation[]>([])
+export function useSomaConversations(token: string, baseUrl = '') {
+  const [conversations, setConversations] = useState<SomaConversation[]>([])
   const [loading, setLoading] = useState(true)
   const api = `${baseUrl || ''}/api/v1`
 
@@ -38,8 +38,8 @@ export function useGliaConversations(token: string, baseUrl = '') {
 
 // ── Files ─────────────────────────────────────
 
-export function useGliaFiles(token: string, baseUrl = '') {
-  const [files, setFiles] = useState<GliaFile[]>([])
+export function useSomaFiles(token: string, baseUrl = '') {
+  const [files, setFiles] = useState<SomaFile[]>([])
   const [loading, setLoading] = useState(true)
   const api = `${baseUrl || ''}/api/v1`
 
@@ -92,7 +92,7 @@ export function useGliaFiles(token: string, baseUrl = '') {
 
 // ── File Content ────────────────────────────
 
-export function useGliaFileContent(token: string, baseUrl = '') {
+export function useSomaFileContent(token: string, baseUrl = '') {
   const [content, setContent] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -123,8 +123,8 @@ export function useGliaFileContent(token: string, baseUrl = '') {
 
 // ── Skills ────────────────────────────────────
 
-export function useGliaSkills(token: string, baseUrl = '') {
-  const [skills, setSkills] = useState<GliaSkill[]>([])
+export function useSomaSkills(token: string, baseUrl = '') {
+  const [skills, setSkills] = useState<SomaSkill[]>([])
   const [loading, setLoading] = useState(true)
   const api = `${baseUrl || ''}/api/v1`
 
@@ -191,8 +191,8 @@ export function useGliaSkills(token: string, baseUrl = '') {
 
 // ── Agents ────────────────────────────────────
 
-export function useGliaAgents(token: string, baseUrl = '') {
-  const [agents, setAgents] = useState<GliaAgent[]>([])
+export function useSomaAgents(token: string, baseUrl = '') {
+  const [agents, setAgents] = useState<SomaAgent[]>([])
   const [loading, setLoading] = useState(true)
   const api = `${baseUrl || ''}/api/v1`
 

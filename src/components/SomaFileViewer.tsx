@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-export interface GliaFileViewerProps {
+export interface SomaFileViewerProps {
   content: string | null
   fileName?: string
   loading?: boolean
@@ -10,7 +10,7 @@ export interface GliaFileViewerProps {
   onClose?: () => void
 }
 
-export function GliaFileViewer({ content, fileName, loading, error, onClose }: GliaFileViewerProps) {
+export function SomaFileViewer({ content, fileName, loading, error, onClose }: SomaFileViewerProps) {
   if (loading) {
     return (
       <div style={{ padding: 16, color: '#8b949e', fontSize: 13, fontFamily: 'system-ui, sans-serif' }}>

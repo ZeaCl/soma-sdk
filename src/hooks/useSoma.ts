@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import type { UseGliaOptions, UseGliaReturn, GliaMessage, GliaStreamEvent } from '../types'
+import type { UseSomaOptions, UseSomaReturn, SomaMessage, SomaStreamEvent } from '../types'
 
-export function useGlia(options: UseGliaOptions): UseGliaReturn {
+export function useSoma(options: UseSomaOptions): UseSomaReturn {
   const {
     agentId,
     conversationId = `dm:${agentId}`,
@@ -18,7 +18,7 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
   const optionsRef = useRef(options)
   optionsRef.current = options
 
-  const [messages, setMessages] = useState<GliaMessage[]>([])
+  const [messages, setMessages] = useState<SomaMessage[]>([])
   const [isConnected, setIsConnected] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
   const [streamContent, setStreamContent] = useState('')
@@ -39,7 +39,7 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
     ws.binaryType = 'arraybuffer'
 
     ws.onopen = () => {
-      console.log('[useGlia] ws open → sending init')
+      console.log('[useSoma] ws open → sending init')
       ws.send(JSON.stringify({ type: 'init', uid: agentId, cid: conversationId, token: apiKey || '' }))
     }
 
@@ -59,22 +59,22 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
           }).catch(() => {})
           return
         } else {
-          console.warn('[useGlia] unknown message type:', typeof event.data, event.data)
+          console.warn('[useSoma] unknown message type:', typeof event.data, event.data)
           return
         }
         processMessage(raw, ws)
       } catch (e) {
-        console.error('[useGlia] onmessage error:', e, 'raw type:', typeof event.data)
+        console.error('[useSoma] onmessage error:', e, 'raw type:', typeof event.data)
       }
     }
 
     function processMessage(raw: string, ws: WebSocket) {
-      const d: GliaStreamEvent = JSON.parse(raw)
+      const d: SomaStreamEvent = JSON.parse(raw)
       switch (d.type) {
         case 'ready':
           readyRef.current = true
           setIsConnected(true)
-          console.log('[useGlia] ← ready, pending:', pendingRef.current.length)
+          console.log('[useSoma] ← ready, pending:', pendingRef.current.length)
           for (const t of pendingRef.current) {
             ws.send(JSON.stringify({ type: 'prompt', text: t }))
           }
@@ -103,9 +103,9 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
           setIsStreaming(false)
           // contentRef mirrors streamRef — always synchronous, never stale.
           const content = contentRef.current || streamRef.current
-          console.log('[useGlia] ← done, content length:', content.length, 'contentRef:', !!contentRef.current, 'streamRef:', !!streamRef.current)
+          console.log('[useSoma] ← done, content length:', content.length, 'contentRef:', !!contentRef.current, 'streamRef:', !!streamRef.current)
           const thinking = thinkingRef.current.trim() || undefined
-          console.log('[useGlia] ← done, content:', content.length, 'thinking:', (thinking || '').length, 'contentRef:', !!contentRef.current)
+          console.log('[useSoma] ← done, content:', content.length, 'thinking:', (thinking || '').length, 'contentRef:', !!contentRef.current)
           if (content || thinking) {
             setMessages(prev => [...prev, {
               id: crypto.randomUUID(),
@@ -119,7 +119,7 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
             thinkingRef.current = ''
             setStreamContent('')
           } else {
-            console.warn('[useGlia] ← done but NO content accumulated — message lost')
+            console.warn('[useSoma] ← done but NO content accumulated — message lost')
           }
           onDone?.()
           break
@@ -145,14 +145,14 @@ export function useGlia(options: UseGliaOptions): UseGliaReturn {
         }
         case 'error':
           setIsStreaming(false)
-          console.error('[useGlia] ← error:', d.message)
+          console.error('[useSoma] ← error:', d.message)
           onError?.(d.message)
           break
       }
     }
 
-    ws.onclose = () => { setIsConnected(false); console.log('[useGlia] ws closed') }
-    ws.onerror = () => { console.error('[useGlia] ws error'); onError?.('Connection error') }
+    ws.onclose = () => { setIsConnected(false); console.log('[useSoma] ws closed') }
+    ws.onerror = () => { console.error('[useSoma] ws error'); onError?.('Connection error') }
     wsRef.current = ws
   }, [wsUrl, agentId, conversationId])
 

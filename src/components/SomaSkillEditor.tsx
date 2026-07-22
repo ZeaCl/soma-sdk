@@ -1,16 +1,16 @@
 'use client'
 
 import React from 'react'
-import type { GliaSkill } from '../types'
+import type { SomaSkill } from '../types'
 
-interface GliaSkillEditorProps {
-  skills: GliaSkill[]
+interface SomaSkillEditorProps {
+  skills: SomaSkill[]
   loading?: boolean
   onCreate?: (name: string, content: string) => Promise<boolean>
   onDelete?: (name: string) => Promise<void>
 }
 
-export function GliaSkillEditor({ skills, loading, onCreate, onDelete }: GliaSkillEditorProps) {
+export function SomaSkillEditor({ skills, loading, onCreate, onDelete }: SomaSkillEditorProps) {
   if (loading) return <div className="p-4 text-sm text-gray-400">Cargando...</div>
 
   return (

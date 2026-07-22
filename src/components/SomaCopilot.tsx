@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { GliaChat } from './GliaChat'
+import { SomaChat } from './SomaChat'
 
-interface GliaCopilotProps {
+interface SomaCopilotProps {
   agentId: string
   apiKey?: string
   baseUrl?: string
@@ -11,7 +11,7 @@ interface GliaCopilotProps {
   onClose?: () => void
 }
 
-export function GliaCopilot({ agentId, apiKey, baseUrl, open = false, onClose }: GliaCopilotProps) {
+export function SomaCopilot({ agentId, apiKey, baseUrl, open = false, onClose }: SomaCopilotProps) {
   const [isOpen, setIsOpen] = useState(open)
   const [width, setWidth] = useState(440)
 
@@ -39,7 +39,7 @@ export function GliaCopilot({ agentId, apiKey, baseUrl, open = false, onClose }:
           <button onClick={() => {}} className="p-1 hover:bg-gray-100 rounded" title="Refresh">↻</button>
           <button onClick={toggle} className="p-1 hover:bg-gray-100 rounded" title="Close">✕</button>
         </div>
-        <GliaChat agentId={agentId} apiKey={apiKey} baseUrl={baseUrl} />
+        <SomaChat agentId={agentId} apiKey={apiKey} baseUrl={baseUrl} />
       </aside>
     </>
   )
