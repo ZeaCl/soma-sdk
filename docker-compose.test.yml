@@ -15,7 +15,7 @@ services:
 
   soma:
     build:
-      context: ../soma
+      context: soma
       dockerfile: Dockerfile
       target: runtime
     environment:
