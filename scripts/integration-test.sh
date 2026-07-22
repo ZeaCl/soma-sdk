@@ -18,21 +18,30 @@ echo -e "${CYAN}🧪 SDK Integration Tests${NC}"
 echo -e "${CYAN}══════════════════════════════════════════${NC}"
 
 # 1. Build and start
-echo -e "\n${CYAN}🐘 Levantando Soma + PostgreSQL...${NC}"
+echo -e "\n${CYAN}🐘 Build + start Soma + PostgreSQL...${NC}"
 cd "$PROJECT_DIR"
-docker compose -f docker-compose.test.yml up -d --build postgres
-docker compose -f docker-compose.test.yml up -d --build soma
+docker compose -f docker-compose.test.yml build --no-cache postgres soma 2>&1 | tail -3
+docker compose -f docker-compose.test.yml up -d postgres soma 2>&1
 
 # 2. Wait for Soma
-echo -e "\n${CYAN}🏥 Esperando Soma...${NC}"
-for i in $(seq 1 30); do
+echo -e "\n${CYAN}🏥 Esperando Soma (puede tardar ~90s en build+start)...${NC}"
+for i in $(seq 1 60); do
   if curl -s http://localhost:4084/health 2>/dev/null | grep -q "ok"; then
     echo -e "  ${GREEN}✅ Soma listo${NC} (${i}s)"
+    # Run migrations
+    docker compose -f docker-compose.test.yml exec -T soma bin/soma eval "Soma.Release.migrate" 2>/dev/null || true
     break
   fi
   sleep 2
   echo -n "."
 done
+
+# Verify
+if ! curl -s http://localhost:4084/health 2>/dev/null | grep -q "ok"; then
+  echo -e "\n${RED}❌ Soma no arrancó${NC}"
+  docker compose -f docker-compose.test.yml logs soma
+  exit 1
+fi
 
 # 3. Run unit tests
 echo -e "\n${CYAN}🧪 Tests unitarios...${NC}"
