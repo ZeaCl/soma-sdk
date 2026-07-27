@@ -96,28 +96,35 @@ function pushBlock(blocks: StreamBlock[], b: StreamBlock): StreamBlock[] {
   return [...blocks, b]
 }
 
-function renderMarkdown(text: string): string {
-  // Escape HTML entities first to prevent XSS
-  let html = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
 
-  // Code blocks (```lang\n...\n```)
-  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_m, lang, code) => {
-    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    return `<pre><code class="soma-code${lang ? ` language-${lang}` : ''}">${escaped}</code></pre>`
+function renderMarkdown(text: string): string {
+  // 1. Extract code blocks BEFORE escaping (avoid double-escape)
+  const codeBlocks: string[] = []
+  let html = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_m, lang, code) => {
+    codeBlocks.push(
+      `<pre><code class="soma-code${lang ? ` language-${lang}` : ''}">${escapeHtml(code)}</code></pre>`
+    )
+    return `\x00CODEBLOCK_${codeBlocks.length - 1}\x00`
   })
 
-  // Inline code
+  // 2. Escape remaining HTML
+  html = escapeHtml(html)
+
+  // 3. Inline code
   html = html.replace(/`([^`]+)`/g, '<code class="soma-code">$1</code>')
 
-  // Bold and italic
+  // 4. Bold and italic
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
 
-  // Newlines
+  // 5. Newlines
   html = html.replace(/\n/g, '<br/>')
+
+  // 6. Restore code blocks
+  html = html.replace(/\x00CODEBLOCK_(\d+)\x00/g, (_m, i) => codeBlocks[parseInt(i)])
 
   return html
 }
