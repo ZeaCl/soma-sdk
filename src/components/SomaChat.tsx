@@ -96,12 +96,37 @@ function pushBlock(blocks: StreamBlock[], b: StreamBlock): StreamBlock[] {
   return [...blocks, b]
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 function renderMarkdown(text: string): string {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`([^`]+)`/g, '<code class="soma-code">$1</code>')
-    .replace(/\n/g, '<br/>')
+  // 1. Extract code blocks BEFORE escaping (avoid double-escape)
+  const codeBlocks: string[] = []
+  let html = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_m, lang, code) => {
+    codeBlocks.push(
+      `<pre><code class="soma-code${lang ? ` language-${lang}` : ''}">${escapeHtml(code)}</code></pre>`
+    )
+    return `\x00CODEBLOCK_${codeBlocks.length - 1}\x00`
+  })
+
+  // 2. Escape remaining HTML
+  html = escapeHtml(html)
+
+  // 3. Inline code
+  html = html.replace(/`([^`]+)`/g, '<code class="soma-code">$1</code>')
+
+  // 4. Bold and italic
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
+
+  // 5. Newlines
+  html = html.replace(/\n/g, '<br/>')
+
+  // 6. Restore code blocks
+  html = html.replace(/\x00CODEBLOCK_(\d+)\x00/g, (_m, i) => codeBlocks[parseInt(i)])
+
+  return html
 }
 
 // ── Component ──
@@ -248,7 +273,7 @@ export function SomaChat({
       {/* Input */}
       {renderInput ? renderInput(defaultInput) : defaultInput}
 
-      <style>{'@keyframes soma-pulse{0%,100%{opacity:1}50%{opacity:0.3}}.soma-code{background:var(--soma-code-bg,var(--zea-b2,#1e2432));padding:1px 5px;border-radius:4px;font-size:0.9em}'}</style>
+      <style>{'@keyframes soma-pulse{0%,100%{opacity:1}50%{opacity:0.3}}.soma-md,.soma-md *{color:inherit!important}.soma-code{background:var(--soma-code-bg,var(--zea-b2,#1e2432));color:var(--soma-text,#e6edf3);padding:1px 5px;border-radius:4px;font-size:0.9em}.soma-md pre{background:var(--soma-code-bg,var(--zea-b2,#1e2432));color:var(--soma-text,#e6edf3);padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;margin:8px 0}.soma-md pre code{background:transparent;padding:0;font-size:inherit}'}</style>
     </div>
   )
 }

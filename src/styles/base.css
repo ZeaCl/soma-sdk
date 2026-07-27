@@ -57,10 +57,35 @@
   50% { opacity: 0.3; }
 }
 
+/* Markdown content — force color inheritance to prevent black-text-on-dark leaks */
+.soma-md,
+.soma-md * {
+  color: inherit !important;
+}
+
 /* Inline code */
 .soma-code {
   background: var(--soma-code-bg, #161b22);
+  color: var(--soma-text, #e6edf3);
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 0.9em;
+}
+
+/* Code blocks (from markdown ```) */
+.soma-md pre {
+  background: var(--soma-code-bg, #161b22);
+  color: var(--soma-text, #e6edf3);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.soma-md pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
 }
