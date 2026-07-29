@@ -1,7 +1,7 @@
 {
   "name": "@zea.cl/soma-sdk",
-  "version": "0.2.2",
-  "description": "ZEA Soma AgentHub SDK \u2014 React components for AI chat, files, skills, and workspaces",
+  "version": "0.2.3",
+  "description": "ZEA Soma AgentHub SDK — React components for AI chat, files, skills, and workspaces",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
