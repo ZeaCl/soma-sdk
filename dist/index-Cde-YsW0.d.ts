@@ -1,5 +1,5 @@
 import React from 'react';
-import { b as SomaFile, d as SomaSkill } from './index-B9tVZyfw.mjs';
+import { b as SomaFile, d as SomaSkill } from './index-B9tVZyfw.js';
 
 interface SomaChatProps {
     agentId: string;
@@ -73,7 +73,7 @@ interface SomaConversationListProps {
         name: string;
     }>;
 }
-declare function SomaConversationList({ conversations, activeId, onSelect, agents }: SomaConversationListProps): React.JSX.Element;
+declare function SomaConversationList({ conversations, activeId, onSelect, onNew, agents }: SomaConversationListProps): React.JSX.Element;
 
 interface SomaFileBrowserProps {
     files: SomaFile[];

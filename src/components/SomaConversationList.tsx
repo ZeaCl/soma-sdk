@@ -10,18 +10,26 @@ interface SomaConversationListProps {
   agents?: Array<{ id: string; name: string }>
 }
 
-export function SomaConversationList({ conversations, activeId, onSelect, agents = [] }: SomaConversationListProps) {
+export function SomaConversationList({ conversations, activeId, onSelect, onNew, agents = [] }: SomaConversationListProps) {
   return (
     <div className="flex flex-col gap-1 p-2">
-      {agents.map(agent => (
-        <button key={agent.id} onClick={() => {}}
-          className="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-600">
-            {agent.name.slice(0, 2).toUpperCase()}
-          </div>
-          <span className="font-medium truncate">{agent.name}</span>
+      {/* New conversation button — always visible when onNew is provided */}
+      {onNew && (
+        <button
+          onClick={() => onNew(agents[0]?.id || '')}
+          className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+          style={{
+            color: '#7c3aed',
+            border: '1px dashed #7c3aed40',
+            background: '#7c3aed0a',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#7c3aed18' }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#7c3aed0a' }}
+        >
+          <span className="text-lg leading-none">+</span>
+          <span>Nueva conversación</span>
         </button>
-      ))}
+      )}
       {conversations.length === 0 && (
         <p className="text-xs text-gray-400 text-center py-4">No conversations yet</p>
       )}

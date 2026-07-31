@@ -554,21 +554,30 @@ function SomaCopilot({ agentId, apiKey, baseUrl, open = false, onClose }) {
     )
   ] });
 }
-function SomaConversationList({ conversations, activeId, onSelect, agents = [] }) {
+function SomaConversationList({ conversations, activeId, onSelect, onNew, agents = [] }) {
   return /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-1 p-2", children: [
-    agents.map((agent) => /* @__PURE__ */ jsxs(
+    onNew && /* @__PURE__ */ jsxs(
       "button",
       {
-        onClick: () => {
+        onClick: () => onNew(agents[0]?.id || ""),
+        className: "w-full text-left px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors",
+        style: {
+          color: "#7c3aed",
+          border: "1px dashed #7c3aed40",
+          background: "#7c3aed0a"
         },
-        className: "w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-gray-100 flex items-center gap-2",
+        onMouseEnter: (e) => {
+          e.currentTarget.style.background = "#7c3aed18";
+        },
+        onMouseLeave: (e) => {
+          e.currentTarget.style.background = "#7c3aed0a";
+        },
         children: [
-          /* @__PURE__ */ jsx("div", { className: "w-6 h-6 rounded bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-600", children: agent.name.slice(0, 2).toUpperCase() }),
-          /* @__PURE__ */ jsx("span", { className: "font-medium truncate", children: agent.name })
+          /* @__PURE__ */ jsx("span", { className: "text-lg leading-none", children: "+" }),
+          /* @__PURE__ */ jsx("span", { children: "Nueva conversaci\xF3n" })
         ]
-      },
-      agent.id
-    )),
+      }
+    ),
     conversations.length === 0 && /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-400 text-center py-4", children: "No conversations yet" }),
     conversations.map((conv) => /* @__PURE__ */ jsxs(
       "button",

@@ -1,5 +1,5 @@
 export { useSoma, useSomaAgents, useSomaConversations, useSomaFileContent, useSomaFiles, useSomaSkills } from './hooks/index.js';
-export { A as AgentSkillPanel, S as SomaChat, a as SomaChatColors, b as SomaChatMessage, c as SomaChatProps, d as SomaConversationList, e as SomaCopilot, f as SomaFileBrowser, g as SomaFileViewer, h as SomaSkillEditor } from './index-CE0o-_of.js';
+export { A as AgentSkillPanel, S as SomaChat, a as SomaChatColors, b as SomaChatMessage, c as SomaChatProps, d as SomaConversationList, e as SomaCopilot, f as SomaFileBrowser, g as SomaFileViewer, h as SomaSkillEditor } from './index-Cde-YsW0.js';
 import React from 'react';
 export { S as SomaAgent, a as SomaConversation, b as SomaFile, c as SomaMessage, d as SomaSkill, e as SomaStreamEvent, U as UseSomaOptions, f as UseSomaReturn } from './index-B9tVZyfw.js';
 
