@@ -163,10 +163,25 @@ export function useUserWorkspace(options: {
 
   useEffect(() => { fetchFiles() }, [])
 
+  const deleteFile = useCallback(async (name: string) => {
+    try {
+      const fullPath = currentPath ? `${currentPath}/${name}` : name
+      const res = await fetch(`${apiBase}/api/files?path=${encodeURIComponent(fullPath)}`, {
+        method: 'DELETE',
+        headers: getHeaders(),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      await fetchFiles(currentPath)
+      return true
+    } catch {
+      return false
+    }
+  }, [apiBase, currentPath, fetchFiles, getHeaders])
+
   return {
     files, loading, error,
     currentPath, setCurrentPath,
-    fetchFiles, navigateTo, navigateUp, upload,
+    fetchFiles, navigateTo, navigateUp, upload, deleteFile,
   }
 }
 
@@ -301,6 +316,7 @@ export function UserWorkspace({
           <SortedFileTable
             files={ws.files}
             onFileClick={handleFileClick}
+            onDelete={(f) => ws.deleteFile(f.name)}
             colors={c}
           />
         )}
@@ -312,12 +328,15 @@ export function UserWorkspace({
 // ── Sub-components ─────────────────────────────────────────────────────────
 
 function SortedFileTable({
-  files, onFileClick, colors: c,
+  files, onFileClick, onDelete, colors: c,
 }: {
   files: WorkspaceFile[]
   onFileClick: (f: WorkspaceFile) => void
+  onDelete?: (f: WorkspaceFile) => void
   colors: UserWorkspaceColors
 }) {
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+
   const sorted = [...files].sort((a, b) => {
     if (a.type !== b.type) return a.type === 'dir' ? -1 : 1
     return a.name.localeCompare(b.name)
@@ -331,6 +350,7 @@ function SortedFileTable({
           <th style={{ padding: '6px 12px', textAlign: 'left', color: c.textSecondary, fontWeight: 500 }}>Nombre</th>
           <th style={{ padding: '6px 12px', textAlign: 'left', color: c.textSecondary, fontWeight: 500, width: 80 }}>Tipo</th>
           <th style={{ padding: '6px 12px', textAlign: 'right', color: c.textSecondary, fontWeight: 500, width: 80 }}>Tamaño</th>
+          {onDelete && <th style={{ padding: '6px 6px', width: 36 }}></th>}
         </tr>
       </thead>
       <tbody>
@@ -355,6 +375,24 @@ function SortedFileTable({
             <td style={{ padding: '6px 12px', textAlign: 'right', color: c.textSecondary }}>
               {f.type === 'file' ? formatSize(f.size) : '—'}
             </td>
+            {onDelete && (
+              <td style={{ padding: '6px 6px', textAlign: 'center' }}>
+                {confirmDelete === f.name ? (
+                  <span style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+                    <button onClick={e => { e.stopPropagation(); onDelete(f); setConfirmDelete(null) }}
+                      style={{ background: '#dc2626', color: '#fff', border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11, padding: '2px 6px' }}
+                      title="Confirmar">✓</button>
+                    <button onClick={e => { e.stopPropagation(); setConfirmDelete(null) }}
+                      style={{ background: c.border, color: c.textSecondary, border: 'none', borderRadius: 3, cursor: 'pointer', fontSize: 11, padding: '2px 6px' }}
+                      title="Cancelar">✗</button>
+                  </span>
+                ) : (
+                  <button onClick={e => { e.stopPropagation(); setConfirmDelete(f.name) }}
+                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 14, opacity: 0.5, padding: 2 }}
+                    title="Eliminar">🗑️</button>
+                )}
+              </td>
+            )}
           </tr>
         ))}
       </tbody>
